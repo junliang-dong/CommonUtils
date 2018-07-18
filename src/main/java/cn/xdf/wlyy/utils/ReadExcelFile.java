@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -17,14 +18,14 @@ import java.sql.Statement;
  */
 public class ReadExcelFile {
 
-    public static void readExcel(String path, String tableName, String idate, String account) {
+    public static void readExcel(String path, String tableName, String idate, String account) throws IOException {
         ZipSecureFile.setMinInflateRatio(0);
         String fileType = path.substring(path.lastIndexOf(".") + 1);
         InputStream is = null;
+        Workbook workbook = null;
         Connection connection = null;
         try {
             is = new FileInputStream(path);
-            Workbook workbook = null;
             if ("xls".equals(fileType)) {
                 workbook = new HSSFWorkbook(is);
             } else if ("xlsx".equals(fileType)) {
@@ -40,6 +41,12 @@ public class ReadExcelFile {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (workbook != null) {
+                workbook.close();
+            }
+            if (is != null) {
+                is.close();
+            }
             MySQLUtil.closeConnection(connection);
         }
     }

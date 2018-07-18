@@ -9,11 +9,12 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class ExportJson2Excel {
 
-    public static void export2Excel(List<String> heads, List<String> names, JSONArray array, String fileName) {
+    public static void export2Excel(List<String> heads, List<String> names, JSONArray array, String fileName) throws IOException {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet();
         HSSFCellStyle style = workbook.createCellStyle();
@@ -35,11 +36,17 @@ public class ExportJson2Excel {
             }
         }
 
+        FileOutputStream stream = null;
         try {
-            FileOutputStream stream = new FileOutputStream(fileName);
+            stream = new FileOutputStream(fileName);
             workbook.write(stream);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            workbook.close();
+            if (stream != null) {
+                stream.close();
+            }
         }
     }
 }
