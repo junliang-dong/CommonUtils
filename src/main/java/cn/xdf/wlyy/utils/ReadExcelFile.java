@@ -82,12 +82,4 @@ public class ReadExcelFile {
             System.out.println(count);
         }
     }
-
-    public static void main(String[] args) {
-        String path = "D:\\WorkSpace\\GitSpace\\CommonUtils\\src\\main\\resources\\data\\7-9\\7-9wuxianzhengti.xlsx";
-        String tableName = "baidu_day_2018_7";
-        String account = "baidu-无线bc北京新东方8152723";
-        String idate = "2018-07-09";
-        readExcel(path, tableName, idate, account);
-    }
 }
