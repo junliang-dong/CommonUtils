@@ -1,5 +1,6 @@
 package cn.xdf.wlyy.utils;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.*;
@@ -18,7 +19,10 @@ import java.sql.Statement;
  */
 public class ReadExcelFile {
 
+    private static Logger logger = Logger.getLogger(ReadExcelFile.class);
+
     public static void readExcel(String path, String tableName, String idate, String account) throws IOException {
+        logger.info("Start reading excel file -> " + path);
         ZipSecureFile.setMinInflateRatio(0);
         String fileType = path.substring(path.lastIndexOf(".") + 1);
         InputStream is = null;
@@ -39,7 +43,7 @@ public class ReadExcelFile {
             checkDataWithMySql(connection, sheet, tableName, idate, account);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("An error occurred when trying to read excel file -> " + path + ", error message is like " + e.getMessage());
         } finally {
             if (workbook != null) {
                 workbook.close();
@@ -52,6 +56,7 @@ public class ReadExcelFile {
     }
 
     private static void checkDataWithMySql(Connection connection, Sheet sheet, String tableName, String idate, String account) {
+        logger.info("Start checking data in mysql...");
         Statement statement = null;
         int count = 0;
         try {
@@ -76,8 +81,9 @@ public class ReadExcelFile {
                     System.out.println(set.getString(6));
                 }
             }
+            logger.info("Finish checking data...");
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("An error occurred when trying to check data in mysql, error message is like " + e.getMessage());
         } finally {
             if (statement != null) {
                 try {

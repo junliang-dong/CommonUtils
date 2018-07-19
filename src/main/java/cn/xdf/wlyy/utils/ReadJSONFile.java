@@ -2,13 +2,17 @@ package cn.xdf.wlyy.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 
 
 public class ReadJSONFile {
 
+    private static Logger logger = Logger.getLogger(ReadJSONFile.class);
+
     public static JSONObject readJSONObject(String filePath) throws IOException {
+        logger.info("Start reading file -> " + filePath);
         InputStream is = null;
         BufferedReader br = null;
         InputStreamReader isr = null;
@@ -23,8 +27,9 @@ public class ReadJSONFile {
                 s.append(tmpStr);
             }
             respJSON = JSON.parseObject(s.toString());
+            logger.info("Finish reading file -> " + filePath);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("An error occurred when trying to read file -> " + filePath + ", error message is like: " + e.getMessage());
         } finally {
             if (br != null) {
                 br.close();

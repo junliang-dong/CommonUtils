@@ -2,6 +2,7 @@ package cn.xdf.wlyy.utils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -9,12 +10,14 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 
 public class ExportJson2Excel {
 
-    public static void export2Excel(List<String> heads, List<String> names, JSONArray array, String fileName) throws IOException {
+    private static Logger logger = Logger.getLogger(ExportJson2Excel.class);
+
+    public static void export2Excel(List<String> heads, List<String> names, JSONArray array, String fileName) {
+        logger.info("Start writing into file -> " + fileName);
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet();
         HSSFCellStyle style = workbook.createCellStyle();
@@ -40,12 +43,17 @@ public class ExportJson2Excel {
         try {
             stream = new FileOutputStream(fileName);
             workbook.write(stream);
+            logger.info("Finish writing file -> " + fileName);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("An error occurred when trying to write file, error message is like: " + e.getMessage());
         } finally {
-            workbook.close();
-            if (stream != null) {
-                stream.close();
+            try {
+                workbook.close();
+                if (stream != null) {
+                    stream.close();
+                }
+            } catch (Exception e2) {
+                logger.error("An error occurred when trying to close stream, error message is like: " + e2.getMessage());
             }
         }
     }
