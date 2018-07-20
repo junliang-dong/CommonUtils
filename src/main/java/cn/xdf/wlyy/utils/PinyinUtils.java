@@ -196,7 +196,7 @@ public class PinyinUtils {
     public static void main(String[] args) throws BadHanyuPinyinOutputFormatCombination {
         try {
 
-            String str = "中信银行(长沙旅行社分行)";
+            String str = "中信银行CB(长沙旅行社分行)";
 
             System.out.println(str + " pyf=" + PinyinUtils.chineseToPinYinF(str));
             System.out.println(str + " pys=" + PinyinUtils.chineseToPinYinS(str));
