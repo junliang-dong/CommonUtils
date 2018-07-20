@@ -21,7 +21,7 @@ public class ReadJSONFile {
         JSONObject respJSON = new JSONObject();
         try {
             is = new FileInputStream(filePath);
-            isr = new InputStreamReader(is);
+            isr = new InputStreamReader(is, "GB2312");
             br = new BufferedReader(isr);
             while ((tmpStr = br.readLine()) != null) {
                 s.append(tmpStr);

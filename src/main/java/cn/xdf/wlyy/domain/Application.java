@@ -2,60 +2,49 @@ package cn.xdf.wlyy.domain;
 
 import cn.xdf.wlyy.utils.ExcelUtils;
 import cn.xdf.wlyy.utils.ExportJson2Excel;
+import cn.xdf.wlyy.utils.MySQLUtil;
 import cn.xdf.wlyy.utils.ReadJSONFile;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 public class Application {
 
-        public static void main(String[] args) {
-        String path = "D:\\WorkSpace\\data\\gaData.txt";
-        try {
-            JSONObject data = ReadJSONFile.readJSONObject(path);
-            List<String> heads = ExcelUtils.getHeads(data);
-            List<String> names = ExcelUtils.getNames(data);
-            JSONArray array = ExcelUtils.transferGaData(data, heads);
-            System.out.println("data: " + array);
-            ExportJson2Excel.export2Excel(heads, names, array, "D:\\WorkSpace\\data\\transData" + UUID.randomUUID().toString() + ".xls");
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void main(String[] args) throws SQLException {
+        String depart = "英联邦";
+        String tableName = "dict_dep";
+        String select_sql = "select DISTINCT account, depart, cplan, eplan from " + tableName + " where depart='" + depart + "'";
+        Connection connection = MySQLUtil.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet select_rs = statement.executeQuery(select_sql);
+        while (select_rs.next()) {
+            String account = select_rs.getString(1);
+            String cplan = select_rs.getString(3);
+            String eplan = select_rs.getString(4);
+            if (eplan.indexOf("yinglianbang") < 0) {
+                String update_sql = "update " + tableName + " set eplan='" + eplan.replace("beijing", "beijing_yinglianbang") + "' where account='" + account + "' and depart='" + depart + "' and cplan='" + cplan + "'";
+                System.out.println(update_sql);
+                Statement update_statement = connection.createStatement();
+                update_statement.execute(update_sql);
+            }
         }
     }
+
 //    public static void main(String[] args) {
 //        String path = "D:\\WorkSpace\\data\\gaData.txt";
 //        try {
 //            JSONObject data = ReadJSONFile.readJSONObject(path);
-//            List<String> heads = new ArrayList<String>();
-//            List<String> names = new ArrayList<String>();
-//            JSONArray array = new JSONArray();
-//            for (int i = 0; i < data.getJSONObject("columnHeader").getJSONArray("dimensions").size(); i++) {
-//                heads.add(data.getJSONObject("columnHeader").getJSONArray("dimensions").getString(i));
-//                names.add(data.getJSONObject("columnHeader").getJSONArray("dimensions").getString(i));
-//            }
-//            for (int i = 0; i < data.getJSONObject("columnHeader").getJSONObject("metricHeader").getJSONArray("metricHeaderEntries").size(); i++) {
-//                heads.add(data.getJSONObject("columnHeader").getJSONObject("metricHeader").getJSONArray("metricHeaderEntries").getJSONObject(i).getString("name"));
-//                names.add(data.getJSONObject("columnHeader").getJSONObject("metricHeader").getJSONArray("metricHeaderEntries").getJSONObject(i).getString("name"));
-//            }
-//            JSONArray rows = data.getJSONObject("data").getJSONArray("rows");
-//            for (int i = 0; i < rows.size(); i++) {
-//                int j = 0;
-//                JSONObject object = new JSONObject();
-//                for (int k = 0; k < rows.getJSONObject(i).getJSONArray("dimensions").size(); k++) {
-//                    object.put(heads.get(j++), rows.getJSONObject(i).getJSONArray("dimensions").getString(k));
-//                }
-//                for (int k = 0; k < rows.getJSONObject(i).getJSONArray("metrics").getJSONObject(0).getJSONArray("values").size(); k++) {
-//                    object.put(heads.get(j++), rows.getJSONObject(i).getJSONArray("metrics").getJSONObject(0).getJSONArray("values").getString(k));
-//                }
-//                array.add(object);
-//            }
-//            System.out.println("heads: " + heads.toString());
-//            System.out.println("names: " + names.toString());
-//            System.out.println(array.toJSONString());
+//            List<String> heads = ExcelUtils.getHeads(data);
+//            List<String> names = ExcelUtils.getNames(data);
+//            JSONArray array = ExcelUtils.transferGaData(data, heads);
 //            ExportJson2Excel.export2Excel(heads, names, array, "D:\\WorkSpace\\data\\transData" + UUID.randomUUID().toString() + ".xls");
 //        } catch (IOException e) {
 //            e.printStackTrace();
