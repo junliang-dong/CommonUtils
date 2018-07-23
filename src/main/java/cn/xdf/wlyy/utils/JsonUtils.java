@@ -7,9 +7,9 @@ import org.apache.log4j.Logger;
 import java.io.*;
 
 
-public class ReadJSONFile {
+public class JsonUtils {
 
-    private static Logger logger = Logger.getLogger(ReadJSONFile.class);
+    private static Logger logger = Logger.getLogger(JsonUtils.class);
 
     public static JSONObject readJSONObject(String filePath) throws IOException {
         logger.info("Start reading file -> " + filePath);

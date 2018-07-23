@@ -36,7 +36,6 @@ public class PinyinUtils {
                 if (StringUtils.isNotEmpty(arr[1])) {
                     String[] sems = arr[1].split(" ");
                     for (String sem : sems) {
-
                         if (StringUtils.isNotEmpty(sem)) {
                             dictionary.put(sem, arr[0]);
                         }
