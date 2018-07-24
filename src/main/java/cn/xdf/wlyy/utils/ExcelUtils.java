@@ -9,7 +9,6 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -19,9 +18,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,8 +139,8 @@ public class ExcelUtils {
             }
 
             Sheet sheet = workbook.getSheetAt(0);
-            connection = MySQLUtil.getConnection();
-            MySQLUtil.checkDataWithMySql(connection, sheet, tableName, idate, account);
+            connection = MySQLUtils.getConnection();
+            MySQLUtils.checkDataWithMySql(connection, sheet, tableName, idate, account);
 
         } catch (Exception e) {
             logger.error("An error occurred when trying to read excel file -> " + path + ", error message is like " + e.getMessage());
@@ -155,7 +151,7 @@ public class ExcelUtils {
             if (is != null) {
                 is.close();
             }
-            MySQLUtil.closeConnection(connection);
+            MySQLUtils.closeConnection(connection);
         }
     }
 }

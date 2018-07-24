@@ -131,7 +131,7 @@ public class PinyinUtils {
             }
         }
 
-        return result.toString().toLowerCase();
+        return result.toString();
     }
 
     public static String chineseToPinYinS(String chineseCharacter) throws BadHanyuPinyinOutputFormatCombination {
@@ -189,7 +189,7 @@ public class PinyinUtils {
             }
         }
 
-        return result.toString().toLowerCase();
+        return result.toString();
     }
 
     public static void main(String[] args) throws BadHanyuPinyinOutputFormatCombination {

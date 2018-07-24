@@ -9,17 +9,19 @@ import java.sql.*;
 /**
  * Created by dongjunliang on 2018-7-17.
  */
-public class MySQLUtil {
+public class MySQLUtils {
 
-    private static Logger logger = Logger.getLogger(MySQLUtil.class);
+    private static Logger logger = Logger.getLogger(MySQLUtils.class);
 
     public static Connection getConnection() {
+        logger.info("Start to connect to mysql...");
         Connection connection = null;
         try {
             Class.forName(MyConfig.MySQL_Driver);
             connection = DriverManager.getConnection(MyConfig.MySQL_Url, MyConfig.MySQL_Username, MyConfig.MySQL_Password);
+            logger.info("Connect successfully...");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("An error occurred when trying to connect to mysql, errro message is like: " + e.getMessage());
         }
         return connection;
     }
