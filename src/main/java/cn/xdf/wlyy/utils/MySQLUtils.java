@@ -42,7 +42,7 @@ public class MySQLUtils {
         int count = 0;
         try {
             statement = connection.createStatement();
-            String sql = "select * from "+ tableName + " where idate='" + idate + "' and account='" + account + "'";
+            String sql = "select * from " + tableName + " where idate='" + idate + "' and account='" + account + "'";
             ResultSet set = statement.executeQuery(sql);
             while (set.next()) {
                 int index = 0;
@@ -58,7 +58,7 @@ public class MySQLUtils {
                     index++;
                 }
                 if (!flag) {
-                    count ++;
+                    count++;
                     System.out.println(set.getString(6));
                 }
             }
